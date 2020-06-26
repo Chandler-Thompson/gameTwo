@@ -6,14 +6,20 @@ public class Player : PlayerMovement
 {
 
     //basic information of Entity
-	public float speed;
-    public float closestDist;
-    public float furthestDist;
-
-	public int health;
-
-    public bool isLeft;
-    public GameObject followPoint;
+    [SerializeField]
+    private float closestDist;
+    [SerializeField]
+    private float furthestDist;
+    [SerializeField]
+	private int health;
+    [SerializeField]
+    private bool isLeft;
+    [SerializeField]
+    private GameObject followPoint;
+    [SerializeField]
+    private GameObject bullet;
+    [SerializeField]
+    private float bulletSpeed;
 
     public void takeDamage(int amount){
 		health -= amount;
@@ -28,13 +34,13 @@ public class Player : PlayerMovement
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        
+        base.Start();
     }
 
     // Update is called once per frame
-    public override void Update()
+    protected override void Update()
     {
         base.Update();
 
@@ -62,6 +68,23 @@ public class Player : PlayerMovement
         float yPosition = GetComponent<Rigidbody2D>().position.y;
 
         GetComponent<Rigidbody2D>().position = new Vector2(xPosition + playerVelocity.x, yPosition + playerVelocity.y);
+
+        if(Input.GetMouseButtonDown(0)){
+            //Pew Pew angle
+            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector2 shootDirection = (Vector2)((worldMousePos - transform.position));
+            shootDirection.Normalize();
+
+            //Create the bullet
+            GameObject bulletInstance = (GameObject)Instantiate(
+                bullet, 
+                transform.position + (Vector3)(direction*0.5f),
+                Quaternion.identity);
+
+            //Adds velocity to the bullet
+            bulletInstance.GetComponent<Rigidbody2D>().velocity = shootDirection * bulletSpeed;
+        }
 
     }
 }
