@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : PlayerMovement
 {
 
     //basic information of Entity
@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 	public int health;
 
     public bool isLeft;
-    public Player partner;
+    public GameObject followPoint;
 
     public void takeDamage(int amount){
 		health -= amount;
@@ -34,27 +34,18 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        bool moveUp = Input.GetKey(KeyCode.W);// || Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Mouse Y") > 0;
-        bool moveLeft = Input.GetKey(KeyCode.A);// || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Mouse X") < 0;
-        bool moveRight = Input.GetKey(KeyCode.D);// || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Mouse X") > 0;
-        bool moveDown = Input.GetKey(KeyCode.S);// || Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Mouse Y") < 0;
+        base.Update();
 
         bool moveCloser = Input.GetKey(KeyCode.Q);
         bool moveFurther = Input.GetKey(KeyCode.E);
-
-        //calculate movement
-        Vector3 upVector = ((moveUp) ? Vector3.up:Vector3.zero);
-        Vector3 leftVector = ((moveLeft) ? Vector3.left:Vector3.zero);
-        Vector3 rightVector = ((moveRight) ? Vector3.right:Vector3.zero);
-        Vector3 downVector = ((moveDown) ? Vector3.down:Vector3.zero);
 
         Vector3 closerVector = ((moveCloser && isLeft) ? Vector3.right : (moveCloser && !isLeft) ? Vector3.left : Vector3.zero);
         Vector3 furtherVector = ((moveFurther && isLeft) ? Vector3.left : (moveFurther && !isLeft) ? Vector3.right : Vector3.zero);
 
         //check that partner isn't too close or too far away
-        float dist = Vector3.Distance(partner.transform.position, this.transform.position);
+        float dist = Vector3.Distance(followPoint.transform.position, this.transform.position);
 
         if(dist >= furthestDist)
             furtherVector = Vector3.zero;
@@ -62,7 +53,8 @@ public class Player : MonoBehaviour
         if(dist <= closestDist)
             closerVector = Vector3.zero;
 
-        Vector3 direction = upVector + leftVector + rightVector + downVector + closerVector + furtherVector;
+        //move closer or further away
+        Vector3 direction = furtherVector + closerVector;
 
         Vector3 playerVelocity = direction * speed * Time.deltaTime;
 

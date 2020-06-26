@@ -127,7 +127,8 @@ MonoBehaviour:
   furthestDist: 7
   health: 5
   isLeft: 0
-  partner: {fileID: 0}
+  followPoint: {fileID: 3345279632597249354, guid: 059e053cb6af6664f94f02cf9e8a2da0,
+    type: 3}
 --- !u!50 &4458571763381718
 Rigidbody2D:
   serializedVersion: 4
