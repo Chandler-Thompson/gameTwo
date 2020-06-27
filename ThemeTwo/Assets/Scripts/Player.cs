@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : PlayerMovement
+public class Player : MonoBehaviour
 {
 
     //basic information of Entity
@@ -11,15 +11,17 @@ public class Player : PlayerMovement
     [SerializeField]
     private float furthestDist;
     [SerializeField]
+    private float separationSpeed;
+    [SerializeField]
 	private int health;
     [SerializeField]
     private bool isLeft;
     [SerializeField]
-    private GameObject followPoint;
-    [SerializeField]
     private GameObject bullet;
     [SerializeField]
     private float bulletSpeed;
+
+    private GameObject followPoint;
 
     public void takeDamage(int amount){
 		health -= amount;
@@ -34,15 +36,16 @@ public class Player : PlayerMovement
     }
 
     // Start is called before the first frame update
-    protected override void Start()
+    void Start()
     {
-        base.Start();
+        followPoint = transform.parent.gameObject;
     }
 
     // Update is called once per frame
-    protected override void Update()
+    void Update()
     {
-        base.Update();
+
+        //Get Closer and Separate
 
         bool moveCloser = Input.GetKey(KeyCode.Q);
         bool moveFurther = Input.GetKey(KeyCode.E);
@@ -62,7 +65,9 @@ public class Player : PlayerMovement
         //move closer or further away
         Vector3 direction = furtherVector + closerVector;
 
-        Vector3 playerVelocity = direction * speed * Time.deltaTime;
+        Vector3 playerVelocity = direction * separationSpeed * Time.deltaTime;
+
+        Debug.Log(direction +"|"+ playerVelocity +"|");
 
         float xPosition = GetComponent<Rigidbody2D>().position.x;
         float yPosition = GetComponent<Rigidbody2D>().position.y;
