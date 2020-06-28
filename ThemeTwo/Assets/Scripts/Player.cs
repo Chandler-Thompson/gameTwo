@@ -10,14 +10,13 @@ public class Player : MonoBehaviour
     [SerializeField] private bool isLeft;
     [SerializeField] private GameObject bullet;
     [SerializeField] private float bulletSpeed;
+    [SerializeField] private float firerate;
+
+    private float prevBulletFired = 0.0f;
 
     private GameObject followPoint;
 
-    public bool isRight(){
-        return !isLeft;
-    }
-
-    public void takeDamage(int amount){
+    public void hitFor(int amount){
 		health -= amount;
 	}
 
@@ -35,11 +34,40 @@ public class Player : MonoBehaviour
         followPoint = this.transform.parent.gameObject;
     }
 
+    // when the GameObjects collider arrange for this GameObject to travel to the left of the screen
+    void OnTriggerEnter2D(Collider2D col)
+    {
+
+        if(col == null)
+            return;
+
+        //get the object collider is attached to
+        GameObject hitBy = col.gameObject;
+
+        //if hit by bullet, take damage
+        if(hitBy.tag == "Monster"){
+            Monster monster = null;
+            hitBy.TryGetComponent<Monster>(out monster);
+
+            this.hitFor(monster.Damage());
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
 
-        if(Input.GetMouseButtonDown(0)){
+        Debug.Log("Player: "+health);
+
+        /*
+        
+            Pew Pew
+
+        */
+        if(Input.GetMouseButton(0) && Time.fixedTime - prevBulletFired >= firerate){
+
+            prevBulletFired = Time.fixedTime;
+
             //Pew Pew angle
             Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -54,6 +82,7 @@ public class Player : MonoBehaviour
 
             //Adds velocity to the bullet
             bulletInstance.GetComponent<Rigidbody2D>().velocity = shootDirection * bulletSpeed;
+
         }
 
     }

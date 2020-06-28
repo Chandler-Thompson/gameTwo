@@ -70,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 leftVelocity = leftDirection * separationSpeed * Time.deltaTime;
         Vector3 rightVelocity = rightDirection * separationSpeed * Time.deltaTime;
 
-        Debug.Log(leftVelocity.ToString("F4") + " | " + rightVelocity.ToString("F4"));
-
         leftPlayer.transform.Translate(leftVelocity);
         rightPlayer.transform.Translate(rightVelocity);
 
