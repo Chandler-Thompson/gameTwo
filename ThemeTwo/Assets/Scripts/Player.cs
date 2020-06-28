@@ -8,13 +8,19 @@ public class Player : MonoBehaviour
     //basic information of Entity
     [SerializeField] private int health;
     [SerializeField] private bool isLeft;
-    [SerializeField] private GameObject bullet;
+    [SerializeField] private Bullet bullet;
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float firerate;
+    [SerializeField] private GameObject turret;
 
     private float prevBulletFired = 0.0f;
+    private float distFromPartner = 1.0f;
 
     private GameObject followPoint;
+
+    public void setPartnerDistance(float dist){
+        this.distFromPartner = dist;
+    }
 
     public void hitFor(int amount){
 		health -= amount;
@@ -57,8 +63,6 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        Debug.Log("Player: "+health);
-
         /*
         
             Pew Pew
@@ -71,15 +75,17 @@ public class Player : MonoBehaviour
             //Pew Pew angle
             Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            Vector2 shootDirection = (Vector2)((worldMousePos - transform.position));
+            Vector2 shootDirection = (Vector2)((worldMousePos - turret.transform.position));
             shootDirection.Normalize();
 
             //Create the bullet
-            GameObject bulletInstance = (GameObject)Instantiate(
-                bullet, 
-                transform.position + (Vector3)(shootDirection*0.5f),
+            GameObject bulletInstance = Instantiate(
+                bullet.gameObject, 
+                turret.transform.position + (Vector3)(shootDirection*0.5f),
                 Quaternion.identity);
 
+            bulletInstance.GetComponent<Bullet>().setDamageModifier(distFromPartner);
+            bulletInstance.transform.localScale = Vector3.one * (distFromPartner/2 + 1);
             //Adds velocity to the bullet
             bulletInstance.GetComponent<Rigidbody2D>().velocity = shootDirection * bulletSpeed;
 

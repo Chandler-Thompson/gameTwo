@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float movementSpeed;
-    [SerializeField] private float separationSpeed;
+    [SerializeField] private float movementSpeed = 1;
+    [SerializeField] private float gravitationSpeed = 1;
     [SerializeField] private float closestDist;
     [SerializeField] private float furthestDist;
 
     [SerializeField] private Player leftPlayer;
     [SerializeField] private Player rightPlayer;
-
-    private float playerDist = 1;//tracked from left player's perspective
+    [SerializeField] private GameObject leftTurret;
+    [SerializeField] private GameObject rightTurret;
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +20,37 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    void Update(){
+        
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        Vector3 newLeftDirection = Vector3.zero;
+        Vector3 newRightDirection = Vector3.zero;
+
+        Vector3 newStaticLeftDirection = Vector3.zero;
+        Vector3 newStaticRightDirection = Vector3.zero;
+
+        Vector3 newDirection = Vector3.zero;
+
+        Rigidbody2D body = GetComponent<Rigidbody2D>();
+
+        Rigidbody2D leftBody = leftPlayer.GetComponent<Rigidbody2D>();
+        Rigidbody2D rightBody = rightPlayer.GetComponent<Rigidbody2D>();
+
+        Transform staticLeftTrans = leftTurret.transform;
+        Transform staticRightTrans = rightTurret.transform;
+
+        Vector3 staticLeftPos = staticLeftTrans.position;
+        Vector3 staticRightPos = staticRightTrans.position; 
+
+        Vector3 leftPos = leftBody.position;
+        Vector3 rightPos = rightBody.position;
+
+        Vector3 pos = body.position;
 
         /*
         
@@ -30,24 +58,37 @@ public class PlayerMovement : MonoBehaviour
 
         */
 
+        var direction = Vector3.zero;
+        float leftDist = Vector3.Distance(staticLeftPos, leftPos);
+         if(leftDist > 0.05)
+         {
+            newLeftDirection += leftTurret.transform.position - leftPos;
+         }
+
+        float rightDist = Vector3.Distance(staticRightPos, rightPos);
+        if(rightDist > 0.05)
+        {
+            newRightDirection += rightTurret.transform.position - rightPos;
+        }
+
         /*
         
             Rotate towards mouse
 
         */
 
-        Vector3 mouse = Input.mousePosition;
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(new Vector3(
-                                                        mouse.x, 
-                                                        mouse.y,
-                                                        mouse.z));
-        Vector3 forward = -mouseWorld + this.transform.position;
+        // Vector3 mouse = Input.mousePosition;
+        // Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(new Vector3(
+        //                                                 mouse.x, 
+        //                                                 mouse.y,
+        //                                                 mouse.z));
+        // Vector3 forward = -mouseWorld + this.transform.position;
 
-        var newRotation = Quaternion.LookRotation(forward, Vector3.forward);
-        newRotation.y = 0.0f;
-        newRotation.x = 0.0f;
+        // var newRotation = Quaternion.LookRotation(forward, Vector3.forward);
+        // newRotation.y = 0.0f;
+        // newRotation.x = 0.0f;
 
-        this.transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10);
+        // this.transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10);
 
         /*
         
@@ -55,34 +96,21 @@ public class PlayerMovement : MonoBehaviour
 
         */
 
-        bool moveCloser = Input.GetKey(KeyCode.Q);
-        bool moveFurther = Input.GetKey(KeyCode.E);
+        //check that static position isn't too close or far away, only need to check one
+        float distance = Vector3.Distance(staticLeftPos, staticRightPos);
+        
+        leftPlayer.setPartnerDistance(distance);
+        rightPlayer.setPartnerDistance(distance);
 
-        //closer and further in terms of the left player
-        Vector3 closerVector = ((moveCloser) ? Vector3.right : Vector3.zero);
-        Vector3 furtherVector = ((moveFurther) ? Vector3.left : Vector3.zero);
+        if(Input.GetKey(KeyCode.Q) && distance >= closestDist){//move closer if possible
+            newStaticLeftDirection += Vector3.right;
+            newStaticRightDirection += Vector3.left;
+        }
 
-        //check that partner isn't too close or too far away, only need to check one
-        float dist = Vector3.Distance(leftPlayer.transform.position, this.transform.position);
-
-        if(dist >= furthestDist)
-            furtherVector = Vector3.zero;
-
-        if(dist <= closestDist)
-            closerVector = Vector3.zero;
-
-        //move closer or further away
-        Vector3 leftDirection = furtherVector + closerVector;
-        Vector3 rightDirection = -(furtherVector + closerVector);//invert vectors for rightPlayer
-
-        Vector2 leftVelocity = leftDirection * separationSpeed * Time.deltaTime;
-        Vector2 rightVelocity = rightDirection * separationSpeed * Time.deltaTime;
-
-        Rigidbody2D leftBody = leftPlayer.GetComponent<Rigidbody2D>();
-        Rigidbody2D rightBody = rightPlayer.GetComponent<Rigidbody2D>();
-
-        leftBody.MovePosition(leftBody.position + leftVelocity * Time.deltaTime);
-        rightBody.MovePosition(rightBody.position + rightVelocity * Time.deltaTime);
+        if(Input.GetKey(KeyCode.E) && distance < furthestDist){//move further if possible
+            newStaticLeftDirection += Vector3.left;
+            newStaticRightDirection += Vector3.right;
+        }
 
         /*
         
@@ -103,22 +131,37 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDirection = upVector + leftVector + rightVector + downVector;
 
-        Vector3 playerVelocity = moveDirection * movementSpeed;
-
-        float xPosition = GetComponent<Rigidbody2D>().position.x;
-        float yPosition = GetComponent<Rigidbody2D>().position.y;
-
-        GetComponent<Rigidbody2D>().velocity = playerVelocity;
-
-        // GetComponent<Rigidbody2D>().position = new Vector2(xPosition + playerVelocity.x, yPosition + playerVelocity.y);
+        newDirection += moveDirection;
+        newLeftDirection += moveDirection;
+        newRightDirection += moveDirection;
         
-        Vector2 leftVel = new Vector2(leftBody.position.x + playerVelocity.x, leftBody.position.y + playerVelocity.y);
-        // leftBody.MovePosition(leftVel);
-        leftBody.velocity = playerVelocity;
+        if(newStaticLeftDirection == Vector3.zero)
+            newStaticLeftDirection += moveDirection;
 
-        Vector2 rightVel = new Vector2(rightBody.position.x + playerVelocity.x, rightBody.position.y + playerVelocity.y);
-        // rightBody.MovePosition(rightVel);
-        rightBody.velocity = playerVelocity;
+        if(newStaticRightDirection == Vector3.zero)
+            newStaticRightDirection += moveDirection;
+
+        /*
+
+            Calculate and set new values
+        
+        */
+
+        Vector3 newPos = pos + (newDirection.normalized * movementSpeed*2 * Time.deltaTime);
+
+        Vector3 newLeftPos = leftPos + (newLeftDirection.normalized * gravitationSpeed * Time.deltaTime);
+        Vector3 newRightPos = rightPos + (newRightDirection.normalized * gravitationSpeed * Time.deltaTime);
+
+        Vector3 newStaticLeftPos = staticLeftPos + (newStaticLeftDirection.normalized * movementSpeed * Time.deltaTime);
+        Vector3 newStaticRightPos = staticRightPos + (newStaticRightDirection.normalized * movementSpeed * Time.deltaTime);
+
+        body.position = newPos;
+
+        leftBody.position = newLeftPos;
+        rightBody.position = newRightPos;
+
+        staticLeftTrans.position = newStaticLeftPos;
+        staticRightTrans.position = newStaticRightPos;
 
     }
 }

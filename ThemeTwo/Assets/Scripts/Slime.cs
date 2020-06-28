@@ -40,6 +40,8 @@ public class Slime : Monster
         }else{
             Vector3 direction = currTarget.transform.position - this.transform.position;
 
+            direction.Normalize();
+
             Vector3 velocity = direction * speed * Time.deltaTime;
 
             Rigidbody2D body = GetComponent<Rigidbody2D>();

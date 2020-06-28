@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float spawnFrequency;
     [SerializeField] private Monster monster;
     [SerializeField] private Player[] targets;
+    [SerializeField] private bool pause;
 
     private float lastSpawn = 0.0f;
 
@@ -22,10 +23,12 @@ public class Spawner : MonoBehaviour
     {
         
         //spawn the monster every <spawnFrequency> seconds
-        if(Time.fixedTime - lastSpawn >= spawnFrequency){
+        if(Time.fixedTime - lastSpawn >= spawnFrequency && !pause){
             lastSpawn = Time.fixedTime;
             Monster newMonster = Instantiate(monster, transform.position, Quaternion.identity);
             newMonster.setTargets(targets);
+            newMonster.setHealthModifier(Time.fixedTime/10);
+            newMonster.transform.localScale = new Vector3(1+Time.fixedTime/100, 1+Time.fixedTime/100, 1+Time.fixedTime/100);
         }
 
     }

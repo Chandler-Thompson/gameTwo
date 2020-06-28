@@ -9,9 +9,14 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float lifetime;
 
     private float startTime;
+    private float damageModifier = 1.0f;
 
     public int Damage(){
-        return this.damage;
+        return (int) Mathf.Ceil(this.damage * damageModifier);
+    }
+
+    public void setDamageModifier(float modifier){
+        damageModifier = modifier;
     }
 
     // Start is called before the first frame update
@@ -26,7 +31,7 @@ public class Bullet : MonoBehaviour
 
         if(hitObject.tag == "Monster"){
             Debug.Log("Ping");
-            hitObject.GetComponent<Monster>().hitFor(damage);
+            hitObject.GetComponent<Monster>().hitFor(Damage());
             Destroy(gameObject);
         }
     }

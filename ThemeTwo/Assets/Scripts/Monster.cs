@@ -11,6 +11,10 @@ public class Monster : MonoBehaviour
     
     protected Player[] targets;
 
+    public void setHealthModifier(float modifier){
+        health = (int) Mathf.Ceil(health * modifier);
+    }
+
     public void setTargets(Player[] targets){
         this.targets = targets;
     }
@@ -30,7 +34,7 @@ public class Monster : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        
+
         GameObject hit = col.gameObject;
 
         if(hit.tag == "Player"){
