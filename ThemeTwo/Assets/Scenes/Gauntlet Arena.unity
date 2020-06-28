@@ -263,6 +263,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &849488066 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2048508339505836377, guid: 3c2b3ef57cd17c34687b69d5bb372267,
+    type: 3}
+  m_PrefabInstance: {fileID: 1198753667}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751ad69331474fc4291f12213e7293ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,6 +709,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1448682711 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8068033979792779397, guid: 3c2b3ef57cd17c34687b69d5bb372267,
+    type: 3}
+  m_PrefabInstance: {fileID: 1198753667}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751ad69331474fc4291f12213e7293ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1755113648
@@ -19599,3 +19623,82 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1001 &2086424276
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3827711431921719336, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: targets.Array.data[0]
+      value: 
+      objectReference: {fileID: 849488066}
+    - target: {fileID: 3827711431921719336, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: targets.Array.data[1]
+      value: 
+      objectReference: {fileID: 1448682711}
+    - target: {fileID: 4449617523112008548, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_Name
+      value: Slime Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -6.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699726156233504387, guid: 8e4566a592529204cba572108e3152da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8e4566a592529204cba572108e3152da, type: 3}

@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Player leftPlayer;
     [SerializeField] private Player rightPlayer;
 
+    private float playerDist = 1;//tracked from left player's perspective
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +23,12 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        /*
+        
+            Gravitate towards position
+
+        */
 
         /*
         
@@ -67,11 +75,14 @@ public class PlayerMovement : MonoBehaviour
         Vector3 leftDirection = furtherVector + closerVector;
         Vector3 rightDirection = -(furtherVector + closerVector);//invert vectors for rightPlayer
 
-        Vector3 leftVelocity = leftDirection * separationSpeed * Time.deltaTime;
-        Vector3 rightVelocity = rightDirection * separationSpeed * Time.deltaTime;
+        Vector2 leftVelocity = leftDirection * separationSpeed * Time.deltaTime;
+        Vector2 rightVelocity = rightDirection * separationSpeed * Time.deltaTime;
 
-        leftPlayer.transform.Translate(leftVelocity);
-        rightPlayer.transform.Translate(rightVelocity);
+        Rigidbody2D leftBody = leftPlayer.GetComponent<Rigidbody2D>();
+        Rigidbody2D rightBody = rightPlayer.GetComponent<Rigidbody2D>();
+
+        leftBody.MovePosition(leftBody.position + leftVelocity * Time.deltaTime);
+        rightBody.MovePosition(rightBody.position + rightVelocity * Time.deltaTime);
 
         /*
         
@@ -92,12 +103,22 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDirection = upVector + leftVector + rightVector + downVector;
 
-        Vector3 playerVelocity = moveDirection * movementSpeed * Time.deltaTime;
+        Vector3 playerVelocity = moveDirection * movementSpeed;
 
         float xPosition = GetComponent<Rigidbody2D>().position.x;
         float yPosition = GetComponent<Rigidbody2D>().position.y;
 
-        GetComponent<Rigidbody2D>().position = new Vector2(xPosition + playerVelocity.x, yPosition + playerVelocity.y);
+        GetComponent<Rigidbody2D>().velocity = playerVelocity;
+
+        // GetComponent<Rigidbody2D>().position = new Vector2(xPosition + playerVelocity.x, yPosition + playerVelocity.y);
+        
+        Vector2 leftVel = new Vector2(leftBody.position.x + playerVelocity.x, leftBody.position.y + playerVelocity.y);
+        // leftBody.MovePosition(leftVel);
+        leftBody.velocity = playerVelocity;
+
+        Vector2 rightVel = new Vector2(rightBody.position.x + playerVelocity.x, rightBody.position.y + playerVelocity.y);
+        // rightBody.MovePosition(rightVel);
+        rightBody.velocity = playerVelocity;
 
     }
 }

@@ -8,7 +8,12 @@ public class Monster : MonoBehaviour
     [SerializeField] protected int health;
     [SerializeField] protected int damage;
     [SerializeField] protected float speed;
-    [SerializeField] protected Player[] targets;
+    
+    protected Player[] targets;
+
+    public void setTargets(Player[] targets){
+        this.targets = targets;
+    }
 
     public int Damage(){
         return this.damage;

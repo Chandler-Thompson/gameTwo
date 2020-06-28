@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4458571763381712}
   - component: {fileID: 4458571763381713}
   - component: {fileID: 4458571763381714}
+  - component: {fileID: 5378779917028099637}
   m_Layer: 0
   m_Name: RedPlayer
   m_TagString: Player
@@ -127,3 +128,24 @@ MonoBehaviour:
   bullet: {fileID: 2654326242147743399, guid: c3c9f037f9884f84484e2ce18554ff73, type: 3}
   bulletSpeed: 5
   firerate: 0.25
+--- !u!50 &5378779917028099637
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4458571763381715}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
