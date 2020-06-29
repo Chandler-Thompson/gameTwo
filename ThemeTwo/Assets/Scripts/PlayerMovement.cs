@@ -14,10 +14,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject leftTurret;
     [SerializeField] private GameObject rightTurret;
 
+    private Animator leftAnimator;
+    private Animator rightAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        leftAnimator = leftPlayer.GetComponent<Animator>();
+        rightAnimator = rightPlayer.GetComponent<Animator>();
     }
 
     void Update(){
@@ -155,13 +159,95 @@ public class PlayerMovement : MonoBehaviour
         Vector3 newStaticLeftPos = staticLeftPos + (newStaticLeftDirection.normalized * movementSpeed * Time.deltaTime);
         Vector3 newStaticRightPos = staticRightPos + (newStaticRightDirection.normalized * movementSpeed * Time.deltaTime);
 
-        body.position = newPos;
+        if(!leftPlayer.isDead() && !rightPlayer.isDead())
+            body.position = newPos;
 
-        leftBody.position = newLeftPos;
-        rightBody.position = newRightPos;
+        if(!leftPlayer.isDead()){
+            leftBody.position = newLeftPos;
+            staticLeftTrans.position = newStaticLeftPos;
+        }
 
-        staticLeftTrans.position = newStaticLeftPos;
-        staticRightTrans.position = newStaticRightPos;
+        if(!rightPlayer.isDead()){
+            rightBody.position = newRightPos;
+            staticRightTrans.position = newStaticRightPos;
+        }
 
+        updateAnimations(newLeftDirection, newRightDirection);
+        
     }
+
+    private void updateAnimations(Vector3 leftDirection, Vector3 rightDirection){
+
+        if(!leftPlayer.isDead()){
+            if(leftDirection.y > 0.01){
+                leftAnimator.SetBool("walkingRight", false);
+                leftAnimator.SetBool("walkingLeft", false);
+                leftAnimator.SetBool("walkingUp", true);        
+                leftAnimator.SetBool("walkingDown", false);
+            } else if(leftDirection.y < -0.01){
+                leftAnimator.SetBool("walkingRight", false);
+                leftAnimator.SetBool("walkingLeft", false);
+                leftAnimator.SetBool("walkingUp", false);        
+                leftAnimator.SetBool("walkingDown", true);
+            } else if(leftDirection.x > 0.01){
+                leftAnimator.SetBool("walkingRight", true);
+                leftAnimator.SetBool("walkingLeft", false);
+                leftAnimator.SetBool("walkingUp", false);        
+                leftAnimator.SetBool("walkingDown", false);
+            } else if(leftDirection.x < -0.01){
+                leftAnimator.SetBool("walkingRight", false);
+                leftAnimator.SetBool("walkingLeft", true);
+                leftAnimator.SetBool("walkingUp", false);        
+                leftAnimator.SetBool("walkingDown", false);
+            } else{
+                leftAnimator.SetBool("walkingRight", false);
+                leftAnimator.SetBool("walkingLeft", false);
+                leftAnimator.SetBool("walkingUp", false);        
+                leftAnimator.SetBool("walkingDown", false);
+            }
+        }else{
+            leftAnimator.SetBool("walkingRight", false);
+            leftAnimator.SetBool("walkingLeft", false);
+            leftAnimator.SetBool("walkingUp", false);        
+            leftAnimator.SetBool("walkingDown", false);
+        }
+
+        if(!rightPlayer.isDead()){
+
+            if(rightDirection.y > 0.01){
+                rightAnimator.SetBool("walkingRight", false);
+                rightAnimator.SetBool("walkingLeft", false);
+                rightAnimator.SetBool("walkingUp", true);        
+                rightAnimator.SetBool("walkingDown", false);
+            } else if(rightDirection.y < -0.01){
+                rightAnimator.SetBool("walkingRight", false);
+                rightAnimator.SetBool("walkingLeft", false);
+                rightAnimator.SetBool("walkingUp", false);        
+                rightAnimator.SetBool("walkingDown", true);
+            } else if(rightDirection.x > 0.01){
+                rightAnimator.SetBool("walkingRight", true);
+                rightAnimator.SetBool("walkingLeft", false);
+                rightAnimator.SetBool("walkingUp", false);        
+                rightAnimator.SetBool("walkingDown", false);
+            } else if(rightDirection.x < -0.01){
+                rightAnimator.SetBool("walkingRight", false);
+                rightAnimator.SetBool("walkingLeft", true);
+                rightAnimator.SetBool("walkingUp", false);        
+                rightAnimator.SetBool("walkingDown", false);
+            } else{
+                rightAnimator.SetBool("walkingRight", false);
+                rightAnimator.SetBool("walkingLeft", false);
+                rightAnimator.SetBool("walkingUp", false);        
+                rightAnimator.SetBool("walkingDown", false);
+            }
+
+        }else{
+            rightAnimator.SetBool("walkingRight", false);
+            rightAnimator.SetBool("walkingLeft", false);
+            rightAnimator.SetBool("walkingUp", false);        
+            rightAnimator.SetBool("walkingDown", false);
+        }
+        
+    }
+
 }

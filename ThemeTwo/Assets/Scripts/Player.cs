@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float firerate;
     [SerializeField] private GameObject turret;
+    [SerializeField] private Sprite deadTurret;
+    [SerializeField] private AudioClip gunshot;
+    [SerializeField] private AudioClip oof;
 
     private float prevBulletFired = 0.0f;
     private float distFromPartner = 1.0f;
@@ -23,6 +26,7 @@ public class Player : MonoBehaviour
     }
 
     public void hitFor(int amount){
+        GetComponent<AudioSource>().PlayOneShot(oof);
 		health -= amount;
 	}
 
@@ -31,7 +35,7 @@ public class Player : MonoBehaviour
 	}
 
     public bool isDead() {
-        return health == 0;
+        return health <= 0;
     }
 
     // Start is called before the first frame update
@@ -68,7 +72,7 @@ public class Player : MonoBehaviour
             Pew Pew
 
         */
-        if(Input.GetMouseButton(0) && Time.fixedTime - prevBulletFired >= firerate){
+        if(Input.GetMouseButton(0) && Time.fixedTime - prevBulletFired >= firerate && health > 0){
 
             prevBulletFired = Time.fixedTime;
 
@@ -89,6 +93,23 @@ public class Player : MonoBehaviour
             //Adds velocity to the bullet
             bulletInstance.GetComponent<Rigidbody2D>().velocity = shootDirection * bulletSpeed;
 
+            GetComponent<AudioSource>().PlayOneShot(gunshot);
+
+        }
+
+        /*
+        
+            Deaded
+
+        */
+
+        if(health <= 0){
+            GetComponent<Animator>().SetBool("dead", true);
+            GetComponent<Animator>().SetBool("walkingUp", false);
+            GetComponent<Animator>().SetBool("walkingDown", false);
+            GetComponent<Animator>().SetBool("walkingLeft", false);
+            GetComponent<Animator>().SetBool("walkingRight", false);
+            turret.GetComponent<SpriteRenderer>().sprite = deadTurret;
         }
 
     }

@@ -30,7 +30,6 @@ public class Bullet : MonoBehaviour
         GameObject hitObject = col.gameObject;
 
         if(hitObject.tag == "Monster"){
-            Debug.Log("Ping");
             hitObject.GetComponent<Monster>().hitFor(Damage());
             Destroy(gameObject);
         }

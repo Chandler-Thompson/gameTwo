@@ -9,6 +9,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Monster monster;
     [SerializeField] private Player[] targets;
     [SerializeField] private bool pause;
+    [SerializeField] GameManager gameManager;
 
     private float lastSpawn = 0.0f;
 
@@ -27,8 +28,10 @@ public class Spawner : MonoBehaviour
             lastSpawn = Time.fixedTime;
             Monster newMonster = Instantiate(monster, transform.position, Quaternion.identity);
             newMonster.setTargets(targets);
-            newMonster.setHealthModifier(Time.fixedTime/10);
-            newMonster.transform.localScale = new Vector3(1+Time.fixedTime/100, 1+Time.fixedTime/100, 1+Time.fixedTime/100);
+            float timeSinceStart = Time.fixedTime - GameManager.startTime;
+            newMonster.setHealthModifier(timeSinceStart/10);
+            newMonster.transform.localScale = new Vector3(1+timeSinceStart/100, 1+timeSinceStart/100, 1+timeSinceStart/100);
+            newMonster.setGameManager(gameManager);
         }
 
     }
